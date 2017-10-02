@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-'''Prints avian taxonomy.
+'''Prints extant avian taxonomy.
 
 Usage: ./taxonomy.py
 '''
@@ -67,4 +67,4 @@ for order in orders:
                 num_species += 1
                 print('\t\t\t%s' % getName(species))
 
-print('\n%d orders, %d familes, %d genera, %d species' % (num_orders, num_families, num_genera, num_species))
+print('\n%d orders, %d families, %d genera, %d species' % (num_orders, num_families, num_genera, num_species))
