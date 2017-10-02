@@ -5,9 +5,10 @@
 Usage: ./taxonomy.py
 '''
 
+import os
 from xml.dom import minidom
 
-IOC_NAMES = '../data/master_ioc-names_xml.xml'
+IOC_NAMES = os.path.join(os.path.dirname(__file__), os.pardir, 'data', 'master_ioc-names_xml.xml')
 
 def getChildrenByTagName(node, tag_name):
     rc = []
