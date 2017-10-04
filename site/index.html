@@ -32,10 +32,11 @@
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
-var svg = d3.select("svg"),
-    margin = 20,
-    diameter = +svg.attr("width"),
-    g = svg.append("g").attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+var svg = d3.select("svg");
+var margin = 20;
+var diameter = +svg.attr("width");
+var g = svg.append("g").attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+var offset = (diameter - margin) / 2;
 
 var color = d3.scaleLinear()
     .domain([-1, 5])
@@ -60,6 +61,7 @@ d3.json("birds.json", function(error, root) {
   var circle = g.selectAll("circle")
     .data(nodes)
     .enter().append("circle")
+      .attr("vector-effect", "non-scaling-stroke")
       .attr("class", function(d) { return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root"; })
       .style("fill", function(d) { return d.children ? color(d.depth) : null; })
       .on("click", function(d) { if (focus !== d) zoom(d), d3.event.stopPropagation(); });
@@ -68,6 +70,7 @@ d3.json("birds.json", function(error, root) {
     .data(nodes)
     .enter().append("text")
       .attr("class", "label")
+      .style("font-size", function(d) { return (13 - (3 * d.depth)) + "px"; })
       .style("fill-opacity", function(d) { return d.parent === root ? 1 : 0; })
       .style("display", function(d) { return d.parent === root ? "inline" : "none"; })
       .text(function(d) { return d.data.name; });
@@ -78,7 +81,7 @@ d3.json("birds.json", function(error, root) {
       .style("background", color(-1))
       .on("click", function() { zoom(root); });
 
-  zoomTo([root.x, root.y, root.r * 2 + margin]);
+  initZoom([root.x, root.y, root.r * 2 + margin]);
 
   function zoom(d) {
     var focus0 = focus; focus = d;
@@ -98,8 +101,23 @@ d3.json("birds.json", function(error, root) {
   }
 
   function zoomTo(v) {
-    var k = diameter / v[2]; view = v;
-    node.attr("transform", function(d) { return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; });
+    var cx = v[0];
+    var cy = v[1];
+    var width = v[2];
+    var k = diameter / width;
+    view = v;
+
+    g.attr("transform", "scale(" + k + ") translate(" + (offset - cx + (width / 2)) + "," + (offset - cy + (width / 2)) + ")");
+  }
+
+  function initZoom(v) {
+    var cx = v[0];
+    var cy = v[1];
+    var width = v[2];
+    var k = diameter / width;
+    view = v;
+
+    node.attr("transform", function(d) { return "translate(" + (d.x - cx) * k + "," + (d.y - cy) * k + ")"; });
     circle.attr("r", function(d) { return d.r * k; });
   }
 });
