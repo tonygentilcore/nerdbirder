@@ -16,7 +16,7 @@
 }
 
 .label {
-  font: 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   text-anchor: middle;
   text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
 }
@@ -70,7 +70,7 @@ d3.json("birds.json", function(error, root) {
     .data(nodes)
     .enter().append("text")
       .attr("class", "label")
-      .style("font-size", function(d) { return (13 - (3 * d.depth)) + "px"; })
+      .style("font-size", function(d) { return (d.r / 5) + "px"; })
       .style("fill-opacity", function(d) { return d.parent === root ? 1 : 0; })
       .style("display", function(d) { return d.parent === root ? "inline" : "none"; })
       .text(function(d) { return d.data.name; });
