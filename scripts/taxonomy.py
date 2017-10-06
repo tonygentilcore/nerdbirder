@@ -38,11 +38,12 @@ def getName(node):
 def isExtinct(node):
     return node.hasAttribute('extinct') and node.attributes['extinct'].value == 'yes'
 
-def getTaxonomyDict():
+def getTaxonomyDict(english_name_filter=None):
     num_orders = 0
     num_families = 0
     num_genera = 0
     num_species = 0
+    num_filter = len(english_name_filter)
     aves_json = {
       'name': 'aves',
       'children': []
@@ -94,45 +95,60 @@ def getTaxonomyDict():
                         continue
                     num_species += 1
                     species_name = getName(species)
+                    size = 1000
+                    images = {}
+                    if english_name_filter:
+                        search_name = species_name.replace("'", '').replace(' ', '').replace('-', '').lower()
+                        post = english_name_filter.pop(search_name, None)
+                        if post:
+                            size = post['likes']
+                            images = post['images']
+                        else:
+                            continue
                     genus_json['children'].append({
                       'name': species_name,
-                      'size': 1000
+                      'size': size,
+                      'images': images
                     })
                     # print('\t\t\t%s' % species_name)
+    print('%d orders, %d families, %d genera, %d species\n' % (num_orders, num_families, num_genera, num_species))
 
-    print('\n%d orders, %d families, %d genera, %d species\n' % (num_orders, num_families, num_genera, num_species))
+    if english_name_filter:
+        print('ERROR: Couldn\'t match: %s' % ', '.join(english_name_filter.keys()))
+
+    num_matched = num_filter - len(english_name_filter)
+
+    print('\nPhotographed %d of %d species (%.2f%% complete)' % (num_matched, num_species, 100.0 * num_matched / num_species))
 
     return aves_json
 
 def getFirstHashtag(caption):
     return caption.split('#')[1].split()[0]
 
-def getInstagramDict():
-    result = {
-      'photos': []
-    }
+def getInstagramPostsByEnglishName():
+    result = {}
     instagram = instagram_scraper.InstagramScraper()
     posts = instagram.media_gen(INSTAGRAM_ACCOUNT)
     num_posts = 0
     for post in posts:
         caption = post['caption']['text']
+        english_name = getFirstHashtag(caption)
         images = post['images']
         likes = post['likes']['count']
-        result['photos'].append({
-          'english_name': getFirstHashtag(caption),
+        result[english_name] = {
           'likes': likes,
           'images': images
-        })
+        }
         num_posts += 1
         # print('%s %d' % (getFirstHashtag(caption), likes))
 
-    print('%d instagram photos' % num_posts)
+    print('%d instagram posts' % num_posts)
 
     return result
 
 def main():
-    instagram_dict = getInstagramDict()
-    taxonomy_dict = getTaxonomyDict()
+    instagram_posts = getInstagramPostsByEnglishName()
+    taxonomy_dict = getTaxonomyDict(english_name_filter=instagram_posts)
 
     with open(JSON_OUT, 'w') as f:
         f.write(json.dumps(taxonomy_dict, separators=(',', ':')))
