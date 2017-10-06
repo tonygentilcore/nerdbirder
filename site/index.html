@@ -35,6 +35,7 @@
 var svg = d3.select("svg");
 var margin = 20;
 var diameter = +svg.attr("width");
+var defs = svg.append("defs");
 var g = svg.append("g").attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
 var offset = (diameter - margin) / 2;
 
@@ -42,6 +43,14 @@ var color = d3.scaleLinear()
     .domain([-1, 5])
     .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
     .interpolate(d3.interpolateHcl);
+
+function thumbnailId(data) {
+  return data.name.replace(/ /g, '').replace(/'/g, '').replace(/-/g, '')
+}
+
+function thumbnailUrl(data) {
+  return data.images ? "url(#" + thumbnailId(data) + ")" : null;
+}
 
 var pack = d3.pack()
     .size([diameter - margin, diameter - margin])
@@ -58,12 +67,30 @@ d3.json("birds.json", function(error, root) {
       nodes = pack(root).descendants(),
       view;
 
+  var patterns = defs.selectAll("pattern")
+    .data(nodes)
+    .enter()
+      .filter(function(d) { return d.data.images })
+      .append("pattern")
+      .attr("id", function(d) { return thumbnailId(d.data); })
+      .attr("x", "0%")
+      .attr("y", "0%")
+      .attr("height", "100%")
+      .attr("width", "100%")
+      .attr("viewBox", function(d) { return "0 0 " + d.data.images.thumbnail.width + " " + d.data.images.thumbnail.height; })
+      .append("image")
+      .attr("xlink:href", function(d) { return d.data.images.thumbnail.url; })
+      .attr("x", "0%")
+      .attr("y", "0%")
+      .attr("height", function(d) { return d.data.images.thumbnail.height; })
+      .attr("width", function(d) { return d.data.images.thumbnail.width; })
+
   var circle = g.selectAll("circle")
     .data(nodes)
     .enter().append("circle")
       .attr("vector-effect", "non-scaling-stroke")
       .attr("class", function(d) { return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root"; })
-      .style("fill", function(d) { return d.children ? color(d.depth) : null; })
+      .style("fill", function(d) { return d.children ? color(d.depth) : thumbnailUrl(d.data); })
       .on("click", function(d) { if (focus !== d) zoom(d), d3.event.stopPropagation(); });
 
   var text = g.selectAll("text")
