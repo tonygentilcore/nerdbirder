@@ -135,7 +135,7 @@ def main():
     taxonomy_dict = getTaxonomyDict()
 
     with open(JSON_OUT, 'w') as f:
-        f.write(json.dumps(taxonomy_dict))
+        f.write(json.dumps(taxonomy_dict, separators=(',', ':')))
 
 if __name__ == '__main__':
     main()
