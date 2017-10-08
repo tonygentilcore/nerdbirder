@@ -99,7 +99,7 @@ d3.json("birds.json", function(error, root) {
       .attr("class", "label")
       .style("font-size", function(d) { return (d.r / 5) + "px"; })
       .style("fill-opacity", function(d) { return d.parent === root ? 1 : 0; })
-      .style("display", function(d) { return d.parent === root ? "inline" : "none"; })
+      .style("display", function(d) { return d.parent === root ? "block" : "none"; })
       .text(function(d) { return d.data.name; });
 
   var node = g.selectAll("circle,text");
@@ -121,9 +121,9 @@ d3.json("birds.json", function(error, root) {
         });
 
     transition.selectAll("text")
-      .filter(function(d) { return d.parent === focus || this.style.display === "inline"; })
+      .filter(function(d) { return d.parent === focus || this.style.display === "block"; })
         .style("fill-opacity", function(d) { return d.parent === focus ? 1 : 0; })
-        .on("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
+        .on("start", function(d) { if (d.parent === focus) this.style.display = "block"; })
         .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
   }
 
