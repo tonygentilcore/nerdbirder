@@ -54,7 +54,7 @@ function thumbnailUrl(data) {
 
 var pack = d3.pack()
     .size([diameter - margin, diameter - margin])
-    .padding(2);
+    .padding(1);
 
 d3.json("birds.json", function(error, root) {
   if (error) throw error;
