@@ -151,7 +151,7 @@ def main():
     taxonomy_dict = getTaxonomyDict(english_name_filter=instagram_posts)
 
     with open(JSON_OUT, 'w') as f:
-        f.write(json.dumps(taxonomy_dict, separators=(',', ':')))
+        f.write(json.dumps(taxonomy_dict, separators=(',\n', ':')))
 
 if __name__ == '__main__':
     main()
