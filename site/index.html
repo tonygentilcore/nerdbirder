@@ -102,7 +102,7 @@ d3.json("birds.json", function(error, root) {
     .enter().append("text")
       .attr("class", "label")
       .style("font-size", function(d) { return (d.r / 5) + "px"; })
-      .style("opacity", function(d) { return d.parent === root ? 1 : 0; })
+      .style("opacity", function(d) { return d.parent === root ? .7 : 0; })
       .style("transition", "opacity .4s ease-in")
       .style("display", function(d) { return d.parent === root ? "block" : "none"; })
       .text(function(d) { return d.data.name; });
@@ -129,7 +129,7 @@ d3.json("birds.json", function(error, root) {
 
   function showLabels() {
     text
-      .style("opacity", function(d) { return d.parent === focus ? 1 : 0; })
+      .style("opacity", function(d) { return d.parent === focus ? .7 : 0; })
       .style("display", function(d) { return d.parent === focus ? "block" : "none"; });
   }
 
