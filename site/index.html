@@ -7,8 +7,8 @@
 }
 
 .node:hover {
-  stroke: #000;
-  stroke-width: 1.5px;
+  stroke: hsl(228,30%,40%);
+  stroke-width: 1px;
 }
 
 .node--leaf {
@@ -33,11 +33,15 @@
 <script>
 
 var svg = d3.select("svg");
-var margin = 20;
+var margin = 10;
 var diameter = +svg.attr("width");
 var defs = svg.append("defs");
-var g = svg.append("g").attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
-var offset = (diameter - margin) / 2;
+var g = svg.append("g")
+  .style("transform", "scale(1) translate(" + diameter / 2 + "px," + diameter / 2 + "px)")
+  .style("will-change", "transform")
+  .style("transition", "transform .4s ease-in");
+var inner_diameter = diameter - margin;
+var offset = inner_diameter / 2;
 
 var color = d3.scaleLinear()
     .domain([-1, 5])
@@ -53,7 +57,7 @@ function thumbnailUrl(data) {
 }
 
 var pack = d3.pack()
-    .size([diameter - margin, diameter - margin])
+    .size([inner_diameter, inner_diameter])
     .padding(1);
 
 d3.json("birds.json", function(error, root) {
@@ -98,7 +102,8 @@ d3.json("birds.json", function(error, root) {
     .enter().append("text")
       .attr("class", "label")
       .style("font-size", function(d) { return (d.r / 5) + "px"; })
-      .style("fill-opacity", function(d) { return d.parent === root ? 1 : 0; })
+      .style("opacity", function(d) { return d.parent === root ? 1 : 0; })
+      .style("transition", "opacity .4s ease-in")
       .style("display", function(d) { return d.parent === root ? "block" : "none"; })
       .text(function(d) { return d.data.name; });
 
@@ -111,20 +116,21 @@ d3.json("birds.json", function(error, root) {
   initZoom([root.x, root.y, root.r * 2 + margin]);
 
   function zoom(d) {
-    var focus0 = focus; focus = d;
+    if (d === focus) return;
+    focus = d;
+    zoomTo([focus.x, focus.y, focus.r * 2 + margin]);
+  }
 
-    var transition = d3.transition()
-        .duration(d3.event.altKey ? 7500 : 750)
-        .tween("zoom", function(d) {
-          var i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2 + margin]);
-          return function(t) { zoomTo(i(t)); };
-        });
+  function hideLabels() {
+    text
+      .style("opacity", 0)
+      .style("display", "none");
+  }
 
-    transition.selectAll("text")
-      .filter(function(d) { return d.parent === focus || this.style.display === "block"; })
-        .style("fill-opacity", function(d) { return d.parent === focus ? 1 : 0; })
-        .on("start", function(d) { if (d.parent === focus) this.style.display = "block"; })
-        .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
+  function showLabels() {
+    text
+      .style("opacity", function(d) { return d.parent === focus ? 1 : 0; })
+      .style("display", function(d) { return d.parent === focus ? "block" : "none"; });
   }
 
   function zoomTo(v) {
@@ -134,7 +140,12 @@ d3.json("birds.json", function(error, root) {
     var k = diameter / width;
     view = v;
 
-    g.attr("transform", "scale(" + k + ") translate(" + (offset - cx + (width / 2)) + "," + (offset - cy + (width / 2)) + ")");
+    hideLabels();
+    g.style("transform", "scale(" + k + ") translate(" + (offset - cx + (width / 2)) + "px," + (offset - cy + (width / 2)) + "px)");
+    g.on("transitionend", function() {
+      g.on("transitionend", null);
+      showLabels();
+    });
   }
 
   function initZoom(v) {
@@ -144,6 +155,7 @@ d3.json("birds.json", function(error, root) {
     var k = diameter / width;
     view = v;
 
+    showLabels();
     node.attr("transform", function(d) { return "translate(" + (d.x - cx) * k + "," + (d.y - cy) * k + ")"; });
     circle.attr("r", function(d) { return d.r * k; });
   }
