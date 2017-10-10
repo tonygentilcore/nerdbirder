@@ -32,7 +32,7 @@ def getName(node):
     latin_name = getText(getChildrenByTagName(node, 'latin_name')[0].childNodes)
     english_name = getChildrenByTagName(node, 'english_name')
     if english_name:
-        return getText(english_name[0].childNodes)
+        return getText(english_name[0].childNodes).replace(' and ', ' & ')
     return latin_name
 
 def isExtinct(node):
