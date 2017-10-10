@@ -101,7 +101,7 @@ def getTaxonomyDict(english_name_filter=None):
                         search_name = species_name.replace("'", '').replace(' ', '').replace('-', '').lower()
                         post = english_name_filter.pop(search_name, None)
                         if post:
-                            size = post['likes']
+                            size = post['likes'] + 5 * post['num_comments']
                             images = post['images']
                         else:
                             continue
@@ -137,6 +137,7 @@ def getInstagramPostsByEnglishName():
         likes = post['likes']['count']
         result[english_name] = {
           'likes': likes,
+          'num_comments': post['comments']['count'],
           'images': images
         }
         num_posts += 1
