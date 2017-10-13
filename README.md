@@ -1,12 +1,24 @@
 # nerdbirder
 
-## Usage
+## Development
 
+### First run setup
 ```sh
 pip install -r requirements.txt
-./scripts/taxonomy.py  # generate json
-cd site
-python -m SimpleHTTPServer 8000
 ```
 
-http://localhost:8000/
+### Update graph json
+```sh
+./scripts/taxonomy.py
+```
+
+### View locally
+```sh
+dev_appserver.py app.yaml
+```
+http://localhost:8080/
+
+### Deploy
+```sh
+gcloud app deploy
+```
