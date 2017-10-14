@@ -8,12 +8,12 @@ If there's any interest in using this project, please let me know and I'd be hap
 
 ### First run setup
 ```sh
-pip install -r requirements.txt
+pip install -t lib -r requirements.txt
 ```
 
 ### Update graph json
 ```sh
-./scripts/taxonomy.py
+./scripts/regenerate_json_cli.py
 ```
 
 ### View locally
@@ -25,4 +25,5 @@ http://localhost:8080/
 ### Deploy
 ```sh
 gcloud app deploy
+gcloud app deploy cron.yaml
 ```
