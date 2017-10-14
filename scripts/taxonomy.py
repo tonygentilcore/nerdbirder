@@ -1,5 +1,5 @@
 import os
-from xml.dom import minidom
+from xml.dom import pulldom
 
 IOC_NAMES = os.path.join(os.path.dirname(__file__), os.pardir, 'data', 'master_ioc-names_xml.xml')
 
@@ -38,9 +38,13 @@ def getHierarchicalDict(english_name_filter=None):
       'children': []
     }
 
-    list = minidom.parse(IOC_NAMES).getElementsByTagName('list')[0]
-    orders = list.getElementsByTagName('order')
-    for order in orders:
+    events = pulldom.parse(IOC_NAMES)
+    for event, node in events:
+        if event != 'START_ELEMENT' or node.tagName != 'order':
+            continue
+        events.expandNode(node)
+        order = node
+
         if isExtinct(order):
             continue
         num_orders += 1
@@ -100,6 +104,7 @@ def getHierarchicalDict(english_name_filter=None):
                       'images': images
                     })
                     # print('\t\t\t%s' % species_name)
+
     print('%d orders, %d families, %d genera, %d species\n' % (num_orders, num_families, num_genera, num_species))
 
     if english_name_filter:
