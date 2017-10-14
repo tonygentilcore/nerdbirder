@@ -3,6 +3,10 @@ api_version: 1
 threadsafe: true
 env_variables:
 
+libraries:
+- name: ssl
+  version: latest
+
 handlers:
 - url: /
   static_files: site/index.html
