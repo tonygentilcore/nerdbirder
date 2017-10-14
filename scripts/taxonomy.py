@@ -46,6 +46,7 @@ def getHierarchicalDict(english_name_filter=None):
         order = node
 
         if isExtinct(order):
+            order.unlink()
             continue
         num_orders += 1
         order_name = getName(order)
@@ -104,6 +105,7 @@ def getHierarchicalDict(english_name_filter=None):
                       'images': images
                     })
                     # print('\t\t\t%s' % species_name)
+        order.unlink()
 
     print('%d orders, %d families, %d genera, %d species\n' % (num_orders, num_families, num_genera, num_species))
 
