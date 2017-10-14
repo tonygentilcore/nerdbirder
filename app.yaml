@@ -1,3 +1,5 @@
+application: nerdbirder
+version: 1
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -9,3 +11,6 @@ handlers:
 - url: /birds.json
   static_files: site/birds.json
   upload: site/birds.json
+- url: /regenerate
+  script: scripts.app
+  login: admin

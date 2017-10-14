@@ -1,0 +1,4 @@
+cron:
+- description: daily json regenerate
+  url: /regenerate
+  schedule: every 24 hours
