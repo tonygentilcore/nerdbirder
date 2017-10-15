@@ -1,9 +1,26 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
+
+html, body {
+  background: rgb(38,0,212);
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+svg {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+}
 
 .node {
   cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .node:hover {
@@ -28,14 +45,14 @@
 }
 
 </style>
-<svg width="960" height="960"></svg>
+<svg></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
 var json_url = location.host.indexOf("localhost") !== -1 ? "birds.json" : "https://storage.googleapis.com/nerdbirder-182817.appspot.com/birds.json";
 var svg = d3.select("svg");
 var margin = 10;
-var diameter = +svg.attr("width");
+var diameter = Math.min(innerWidth, innerHeight);
 var defs = svg.append("defs");
 var g = svg.append("g")
   .style("transform", "scale(1) translate(" + diameter / 2 + "px," + diameter / 2 + "px)")
