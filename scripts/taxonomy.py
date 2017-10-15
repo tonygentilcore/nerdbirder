@@ -7,7 +7,7 @@ def getName(node):
     latin_name = node.findtext('latin_name')
     english_name = node.findtext('english_name')
     if english_name:
-        return english_name.replace(' and ', ' & ')
+        return english_name.replace('and allies', 'et al').replace(' and ', ' & ')
     return latin_name
 
 def isExtinct(node):
