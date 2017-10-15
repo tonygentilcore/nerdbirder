@@ -1,31 +1,17 @@
 import os
-from xml.dom import pulldom
+from xml.etree.cElementTree import iterparse
 
 IOC_NAMES = os.path.join(os.path.dirname(__file__), os.pardir, 'data', 'master_ioc-names_xml.xml')
 
-def getChildrenByTagName(node, tag_name):
-    rc = []
-    for child in node.childNodes:
-        if child.nodeType == child.ELEMENT_NODE and child.tagName == tag_name:
-            rc.append(child)
-    return rc
-
-def getText(nodelist):
-    rc = []
-    for node in nodelist:
-        if node.nodeType == node.TEXT_NODE:
-            rc.append(node.data)
-    return ''.join(rc)
-
 def getName(node):
-    latin_name = getText(getChildrenByTagName(node, 'latin_name')[0].childNodes)
-    english_name = getChildrenByTagName(node, 'english_name')
+    latin_name = node.findtext('latin_name')
+    english_name = node.findtext('english_name')
     if english_name:
-        return getText(english_name[0].childNodes).replace(' and ', ' & ')
+        return english_name.replace(' and ', ' & ')
     return latin_name
 
 def isExtinct(node):
-    return node.hasAttribute('extinct') and node.attributes['extinct'].value == 'yes'
+    return node.get('extinct') == 'yes'
 
 def getHierarchicalDict(english_name_filter=None):
     num_orders = 0
@@ -38,15 +24,13 @@ def getHierarchicalDict(english_name_filter=None):
       'children': []
     }
 
-    events = pulldom.parse(IOC_NAMES)
-    for event, node in events:
-        if event != 'START_ELEMENT' or node.tagName != 'order':
+    for event, elem in iterparse(IOC_NAMES):
+        if elem.tag != 'order':
             continue
-        events.expandNode(node)
-        order = node
+        order = elem
 
         if isExtinct(order):
-            order.unlink()
+            order.clear()
             continue
         num_orders += 1
         order_name = getName(order)
@@ -57,7 +41,7 @@ def getHierarchicalDict(english_name_filter=None):
         result['children'].append(order_result)
         # print(order_name)
 
-        families = order.getElementsByTagName('family')
+        families = order.findall('family')
         for family in families:
             if isExtinct(family):
                 continue
@@ -70,7 +54,7 @@ def getHierarchicalDict(english_name_filter=None):
             order_result['children'].append(family_result)
             # print('\t%s' % family_name)
 
-            genera = family.getElementsByTagName('genus')
+            genera = family.findall('genus')
             for genus in genera:
                 if isExtinct(genus):
                     continue
@@ -83,7 +67,7 @@ def getHierarchicalDict(english_name_filter=None):
                 family_result['children'].append(genus_result)
                 # print('\t\t%s' % genus_name)
 
-                speciess = genus.getElementsByTagName('species')
+                speciess = genus.findall('species')
                 for species in speciess:
                     if isExtinct(species):
                         continue
@@ -105,7 +89,7 @@ def getHierarchicalDict(english_name_filter=None):
                       'images': images
                     })
                     # print('\t\t\t%s' % species_name)
-        order.unlink()
+        order.clear()
 
     print('%d orders, %d families, %d genera, %d species\n' % (num_orders, num_families, num_genera, num_species))
 
