@@ -1,4 +1,4 @@
 cron:
-- description: daily json regenerate
+- description: twice daily json regenerate
   url: /regenerate_json
-  schedule: every 24 hours
+  schedule: every 12 hours
