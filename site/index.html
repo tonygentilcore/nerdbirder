@@ -147,8 +147,8 @@ d3.json(json_url, function(error, root) {
 
   function showLabels() {
     text
-      .style("opacity", function(d) { return d.parent === focus ? .7 : 0; })
-      .style("display", function(d) { return d.parent === focus ? "block" : "none"; });
+      .style("display", function(d) { return d.parent === focus ? "block" : "none"; })
+      .style("opacity", function(d) { return d.parent === focus ? .7 : 0; });
   }
 
   function zoomTo(v) {
