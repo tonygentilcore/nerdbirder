@@ -21,7 +21,11 @@ with open(TAXONOMY, 'rU') as csvfile:
             continue
         genus, species = row['SCI_NAME'].split(' ')
         _, english_name = row['FAMILY'].split('(')
-        genus_to_family[genus] = english_name[:-1].replace(' and Allies', ' et al').replace(', and ', ' & ').replace(' and ', ' & ')
+        genus_to_family[genus] = english_name[:-1].replace(', and Allies', ', et al.').replace(' and Allies', ', et al.').replace(', and ', ' & ').replace(' and ', ' & ')
+
+iterable = []
+for genus, family in genus_to_family.iteritems():
+    iterable.append([genus, family])
 
 with open(JSON_OUT, 'w') as f:
-    f.write(json.dumps(genus_to_family, separators=(',\n', ':')))
+    f.write(json.dumps(iterable, separators=(',\n', ':')))
