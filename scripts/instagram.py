@@ -30,8 +30,8 @@ def getFirstHashtag(caption):
 def getPostsByEnglishName():
     result = {}
     instagram = instagram_scraper.InstagramScraper()
-    user_details = instagram.get_user_details(INSTAGRAM_ACCOUNT)
-    posts = instagram.query_media_gen(user_details)
+    user = instagram.get_user(INSTAGRAM_ACCOUNT)
+    posts = instagram.query_media_gen(user)
     num_posts = 0
     for post in posts:
         caption = post['edge_media_to_caption']['edges'][0]['node']['text']
