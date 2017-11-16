@@ -11,6 +11,9 @@ handlers:
 - url: /
   static_files: site/index.html
   upload: site/index.html
+- url: /privacy_policy.html
+  static_files: site/privacy_policy.html
+  upload: site/privacy_policy.html
 - url: /birds.json
   static_files: site/birds.json
   upload: site/birds.json
