@@ -14,6 +14,10 @@ class DummyProcessing(object):
         return DummyLock()
 
     @staticmethod
+    def RLock():
+        return DummyLock()
+
+    @staticmethod
     def Process(target):
         return DummyProcess(target)
 

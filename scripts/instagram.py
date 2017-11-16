@@ -30,17 +30,25 @@ def getFirstHashtag(caption):
 def getPostsByEnglishName():
     result = {}
     instagram = instagram_scraper.InstagramScraper()
-    posts = instagram.media_gen(INSTAGRAM_ACCOUNT)
+    user_details = instagram.get_user_details(INSTAGRAM_ACCOUNT)
+    posts = instagram.query_media_gen(user_details)
     num_posts = 0
     for post in posts:
-        caption = post['caption']['text']
+        caption = post['edge_media_to_caption']['edges'][0]['node']['text']
         english_name = getFirstHashtag(caption)
-        images = post['images']
-        likes = post['likes']['count']
+        likes = post['edge_media_preview_like']['count']
+        comments = post['edge_media_to_comment']['count']
+        thumbnail = post['thumbnail_resources'][0]
         result[english_name] = {
           'likes': likes,
-          'num_comments': post['comments']['count'],
-          'images': images
+          'num_comments': comments,
+          'images': {
+              'thumbnail': {
+                  'url': thumbnail['src'],
+                  'width': thumbnail['config_width'],
+                  'height': thumbnail['config_height']
+              }
+          }
         }
         num_posts += 1
         # print('%s %d' % (getFirstHashtag(caption), likes))
