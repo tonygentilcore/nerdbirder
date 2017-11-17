@@ -11,9 +11,15 @@ handlers:
 - url: /
   static_files: site/index.html
   upload: site/index.html
+- url: /favicon.ico
+  static_files: site/favicon.ico
+  upload: site/favicon.ico
 - url: /privacy_policy.html
   static_files: site/privacy_policy.html
   upload: site/privacy_policy.html
+- url: /taxonomy.html
+  static_files: site/taxonomy.html
+  upload: site/taxonomy.html
 - url: /birds.json
   static_files: site/birds.json
   upload: site/birds.json

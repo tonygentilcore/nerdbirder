@@ -1,182 +1,47 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Nerdbirder</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 <style>
-
-html, body {
-  background: rgb(38,255,212);
-  margin: 0;
-  overflow: hidden;
-  padding: 0;
-}
-
-svg {
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-}
-
-.node {
-  cursor: pointer;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.node:hover {
-  stroke: hsl(228,30%,40%);
-  stroke-width: 1px;
-}
-
-.node--leaf {
-  fill: white;
-}
-
-.label {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  text-anchor: middle;
-  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
-}
-
-.label,
-.node--root,
-.node--leaf {
-  pointer-events: none;
-}
-
+  a {
+    color: #008282;
+  }
+  body {
+    margin: 0;
+  }
+  .background {
+    background-image: radial-gradient(farthest-corner at 67% 100%, #008282 0%, rgba(0, 0, 0, 0) 100%), radial-gradient(farthest-corner at 33% 0, #6a006a 33%, #000056 100%);
+    bottom: 0;
+    left: 0;
+    padding: 30px;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .content {
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid white;
+    border-radius: 20px;
+    flex: 1;
+    font-family: 'Roboto', sans-serif;
+    padding: 20px;
+  }
+  .embed {
+    align-self: center;
+    flex: 1;
+    width: 300px;
+  }
 </style>
-<svg></svg>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script>
 
-var json_url = location.host.indexOf("localhost") !== -1 ? "birds.json" : "https://storage.googleapis.com/nerdbirder-182817.appspot.com/birds.json";
-var svg = d3.select("svg");
-var margin = 10;
-var diameter = Math.min(innerWidth, innerHeight);
-var defs = svg.append("defs");
-var g = svg.append("g")
-  .style("transform", "scale(1) translate(" + diameter / 2 + "px," + diameter / 2 + "px)")
-  .style("will-change", "transform")
-  .style("transition", "transform .4s ease-in");
-var inner_diameter = diameter - margin;
-var offset = inner_diameter / 2;
+<div class="background">
+  <div class="content">
+    <h2>Welcome to The Nerdbirder.</h2>
 
-var color = d3.scaleLinear()
-    .domain([-1, 5])
-    .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
-    .interpolate(d3.interpolateHcl);
+    <p>I'm on a quest to photograph every living species of avian dinosaur.</p>
 
-function thumbnailId(data) {
-  return data.name.replace(/ /g, '').replace(/'/g, '').replace(/-/g, '')
-}
+    <p>You can follow me on Instagram or hit me at <a href="mailto:tony@thenerdbirder.com">tony@thenerdbirder.com</a>. There's also a <a href="taxonomy.html">taxonomical visualization</a> of the species I've captured so far.</p>
 
-function thumbnailUrl(data) {
-  return data.images ? "url(#" + thumbnailId(data) + ")" : null;
-}
-
-var pack = d3.pack()
-    .size([inner_diameter, inner_diameter])
-    .padding(1);
-
-d3.json(json_url, function(error, root) {
-  if (error) throw error;
-
-  root = d3.hierarchy(root)
-      .sum(function(d) { return d.size; })
-      .sort(function(a, b) { return b.value - a.value; });
-
-  var focus = root,
-      nodes = pack(root).descendants(),
-      view;
-
-  var patterns = defs.selectAll("pattern")
-    .data(nodes)
-    .enter()
-      .filter(function(d) { return d.data.images })
-      .append("pattern")
-      .attr("id", function(d) { return thumbnailId(d.data); })
-      .attr("x", "0%")
-      .attr("y", "0%")
-      .attr("height", "100%")
-      .attr("width", "100%")
-      .attr("viewBox", function(d) { return "0 0 " + d.data.images.thumbnail.width + " " + d.data.images.thumbnail.height; })
-      .append("image")
-      .attr("xlink:href", function(d) { return d.data.images.thumbnail.url; })
-      .attr("x", "0%")
-      .attr("y", "0%")
-      .attr("height", function(d) { return d.data.images.thumbnail.height; })
-      .attr("width", function(d) { return d.data.images.thumbnail.width; })
-
-  var circle = g.selectAll("circle")
-    .data(nodes)
-    .enter().append("circle")
-      .attr("vector-effect", "non-scaling-stroke")
-      .attr("class", function(d) { return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root"; })
-      .style("fill", function(d) { return d.children ? color(d.depth) : thumbnailUrl(d.data); })
-      .on("click", function(d) { if (focus !== d) zoom(d), d3.event.stopPropagation(); });
-
-  var text = g.selectAll("text")
-    .data(nodes)
-    .enter().append("text")
-      .attr("class", "label")
-      .style("font-size", function(d) { return (d.r / 5) + "px"; })
-      .style("opacity", function(d) { return d.parent === root ? .7 : 0; })
-      .style("transition", "opacity .4s ease-in")
-      .style("display", function(d) { return d.parent === root ? "block" : "none"; })
-      .text(function(d) { return d.data.name; });
-
-  var node = g.selectAll("circle,text");
-
-  svg
-      .style("background", color(-1))
-      .on("click", function() { zoom(root); });
-
-  initZoom([root.x, root.y, root.r * 2 + margin]);
-
-  function zoom(d) {
-    if (d === focus) return;
-    focus = d;
-    zoomTo([focus.x, focus.y, focus.r * 2 + margin]);
-  }
-
-  function hideLabels() {
-    text
-      .style("opacity", 0)
-      .style("display", "none");
-  }
-
-  function showLabels() {
-    text
-      .style("display", function(d) { return d.parent === focus ? "block" : "none"; })
-      .style("opacity", function(d) { return d.parent === focus ? .7 : 0; });
-  }
-
-  function zoomTo(v) {
-    var cx = v[0];
-    var cy = v[1];
-    var width = v[2];
-    var k = diameter / width;
-    view = v;
-
-    hideLabels();
-    g.style("transform", "scale(" + k + ") translate(" + (offset - cx + (width / 2)) + "px," + (offset - cy + (width / 2)) + "px)");
-    g.on("transitionend", function() {
-      g.on("transitionend", null);
-      showLabels();
-    });
-  }
-
-  function initZoom(v) {
-    var cx = v[0];
-    var cy = v[1];
-    var width = v[2];
-    var k = diameter / width;
-    view = v;
-
-    showLabels();
-    node.attr("transform", function(d) { return "translate(" + (d.x - cx) * k + "," + (d.y - cy) * k + ")"; });
-    circle.attr("r", function(d) { return d.r * k; });
-  }
-});
-
-</script>
+    <div class="embed">
+      <blockquote class="instagram-media" data-instgrm-version="7" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:8px;"> <div style=" background:#F8F8F8; line-height:0; margin-top:40px; padding:62.5% 0; text-align:center; width:100%;"> <div style=" background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;"></div></div><p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;"><a href="https://www.instagram.com/p/BaEbRK5BHB_/" style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">A post shared by Nerd Birder (@nerdbirder)</a> on <time style=" font-family:Arial,sans-serif; font-size:14px; line-height:17px;" datetime="2017-10-10T13:27:44+00:00">Oct 10, 2017 at 6:27am PDT</time></p></div></blockquote> <script async defer src="//platform.instagram.com/en_US/embeds.js"></script>
+    </div>
+  </div>
+</div>
