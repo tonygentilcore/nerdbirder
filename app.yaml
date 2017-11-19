@@ -20,6 +20,9 @@ handlers:
 - url: /images/appscreen.png
   static_files: site/images/appscreen.png
   upload: site/images/appscreen.png
+- url: /images/appstore.svg
+  static_files: site/images/appstore.svg
+  upload: site/images/appstore.svg
 - url: /taxonomy.html
   static_files: site/taxonomy.html
   upload: site/taxonomy.html
