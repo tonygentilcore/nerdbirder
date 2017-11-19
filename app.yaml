@@ -17,6 +17,9 @@ handlers:
 - url: /privacy_policy.html
   static_files: site/privacy_policy.html
   upload: site/privacy_policy.html
+- url: /images/appscreen.png
+  static_files: site/images/appscreen.png
+  upload: site/images/appscreen.png
 - url: /taxonomy.html
   static_files: site/taxonomy.html
   upload: site/taxonomy.html

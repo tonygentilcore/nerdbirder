@@ -6,23 +6,24 @@
     color: #008282;
   }
   body {
-    margin: 0;
-  }
-  .background {
     background-image: radial-gradient(farthest-corner at 67% 100%, #008282 0%, rgba(0, 0, 0, 0) 100%), radial-gradient(farthest-corner at 33% 0, #6a006a 33%, #000056 100%);
-    bottom: 0;
-    left: 0;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
     padding: 30px;
-    position: absolute;
-    right: 0;
-    top: 0;
+  }
+  .copyright {
+    color: white;
+    text-align: center;
+    padding: 30px;
+  }
+  .copyright > a {
+    color: white;
   }
   .content {
     background: rgba(255, 255, 255, 0.95);
     border: 2px solid white;
     border-radius: 20px;
     flex: 1;
-    font-family: 'Roboto', sans-serif;
     padding: 20px;
   }
   .embed {
@@ -32,16 +33,34 @@
   }
 </style>
 
-<div class="background">
-  <div class="content">
-    <h2>Welcome to The Nerdbirder.</h2>
+<div class="content">
+  <h2>Welcome to The Nerdbirder.</h2>
 
-    <p>I'm on a quest to photograph every living species of avian dinosaur.</p>
+  <p>I'm on a quest to photograph every living species of avian dinosaur.</p>
 
-    <p>You can follow me on Instagram or hit me at <a href="mailto:tony@thenerdbirder.com">tony@thenerdbirder.com</a>. There's also a <a href="taxonomy.html">taxonomical visualization</a> of the species I've captured so far.</p>
+  <h3>GoBird App</h3>
 
-    <div class="embed">
-      <blockquote class="instagram-media" data-instgrm-version="7" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:8px;"> <div style=" background:#F8F8F8; line-height:0; margin-top:40px; padding:62.5% 0; text-align:center; width:100%;"> <div style=" background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;"></div></div><p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;"><a href="https://www.instagram.com/p/BaEbRK5BHB_/" style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">A post shared by Nerd Birder (@nerdbirder)</a> on <time style=" font-family:Arial,sans-serif; font-size:14px; line-height:17px;" datetime="2017-10-10T13:27:44+00:00">Oct 10, 2017 at 6:27am PDT</time></p></div></blockquote> <script async defer src="//platform.instagram.com/en_US/embeds.js"></script>
-    </div>
+  <p>None of the existing birding apps out there were fast and clean enough for me, so I wrote my own. It's brand new and I'd love feedback. If it's useful to people, I'm excited to add features. Please <a href="mailto:tony@thenerdbirder.com" target="_blank">let me know</a> what you'd like to see it do.</p>
+
+  <p><img height="200" width="382" src="/images/appscreen.png" /></p>
+
+  <a href='https://play.google.com/store/apps/details?id=com.thenerdbirder.GoBird&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
+    <img alt='Get it on Google Play' height="75" width="194" src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/>
+  </a>
+
+  <h3>Photography on Instagram</h3>
+
+  <p>You can see a new species portrait and fact every day (err... almost every day) on my <a href="https://www.instagram.com/nerdbirder/" target="_blank">@nerdbirder</a> instagram account.</p>
+
+  <div class="embed">
+    <blockquote class="instagram-media" data-instgrm-version="7" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:8px;"> <div style=" background:#F8F8F8; line-height:0; margin-top:40px; padding:62.5% 0; text-align:center; width:100%;"> <div style=" background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;"></div></div><p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;"><a href="https://www.instagram.com/p/BaEbRK5BHB_/" style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">A post shared by Nerd Birder (@nerdbirder)</a> on <time style=" font-family:Arial,sans-serif; font-size:14px; line-height:17px;" datetime="2017-10-10T13:27:44+00:00">Oct 10, 2017 at 6:27am PDT</time></p></div></blockquote> <script async defer src="//platform.instagram.com/en_US/embeds.js"></script>
   </div>
+
+  <h3>Labs</h3>
+
+  <p>There's also a <a href="taxonomy.html">taxonomical visualization</a> of the species I've captured so far.</p>
+</div>
+
+<div class="copyright">
+  &copy; 2017 Tony Gentilcore | <a href="mailto:tony@thenerdbirder.com" target="_blank">tony@thenerdbirder.com</a>
 </div>
