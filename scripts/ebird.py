@@ -17,12 +17,18 @@ language_to_languagename = {
   'es': 'español'
 }
 
+language_to_englishname = {
+  'es': 'Spanish'
+}
+
 language = None
 languagename = None
+englishlanguagename = None
 outfile = 'families.json'
 if len(sys.argv) == 2:
     language = sys.argv[1]
     languagename = language_to_languagename[language]
+    englishlanguagename = language_to_englishname[language]
     outfile = 'families-' + language + '.json'
 
 TAXONOMY = os.path.join(os.path.dirname(__file__), os.pardir, 'data', 'eBird_Taxonomy_v2017_18Aug2017.csv')
@@ -54,10 +60,34 @@ def requestWikispeciesVernacular(sci_name):
         return m.group(1)
     return None
 
+def requestInaturalistVernacular(sci_name):
+    try:
+        response = urllib2.urlopen('https://www.inaturalist.org/taxon_names.json?q=' + sci_name)
+        response_json = json.loads(response.read())
+    except urllib2.HTTPError:
+        print 'iNaturalist HTTP Error for ' + sci_name
+        return None
+    if len(response_json) != 1:
+        return None
+    taxon_id = response_json[0]['taxon_id']
+    try:
+        response = urllib2.urlopen('https://www.inaturalist.org/taxon_names.json?taxon_id=' + str(taxon_id))
+        response_json = json.loads(response.read())
+    except urllib2.HTTPError:
+        print 'iNaturalist HTTP Error for ' + sci_name
+        return None
+    for record in response_json:
+        if record['lexicon'] == englishlanguagename:
+            print 'iNaturalist', record['name']
+            return record['name']
+    return None
+
 sci_to_common_family_name = {}
 def getCommonFamilyName(sci_name):
     if sci_name not in sci_to_common_family_name:
-        common_name = requestWikicommonsVernacular(sci_name)
+        common_name = requestInaturalistVernacular(sci_name)
+        if not common_name:
+            common_name = requestWikicommonsVernacular(sci_name)
         if not common_name:
             common_name = requestWikispeciesVernacular(sci_name)
         sci_to_common_family_name[sci_name] = common_name
