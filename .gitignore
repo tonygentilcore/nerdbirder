@@ -62,7 +62,7 @@ typings/
 *.pyc
 lib/
 
-data/ABA_Checklist-8.0.4.csv
+data/ABA_Checklist-8.0.5.csv
 data/species_20171108_5576.csv
 site/abacodes.json
 site/redlist.json
