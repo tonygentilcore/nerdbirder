@@ -5,3 +5,6 @@ http://www.birds.cornell.edu/clementschecklist/download/
 
 `ABA_Checklist-8.0.5.csv` may be obtained from
 http://listing.aba.org/aba-checklist/
+
+`species_20190115_10872.csv` may be obtained from
+http://datazone.birdlife.org/species/results?thrlev1=&thrlev2=&kw=&fam=0&gen=0&spc=&cmn=&reg=0&cty=0&rlEW=Y&rlCR=Y&rlEN=Y&rlVU=Y&rlNT=Y
