@@ -9,7 +9,7 @@ import csv
 import json
 import os
 
-REDLIST = os.path.join(os.path.dirname(__file__), os.pardir, 'data', 'species_20190115_10872.csv')
+REDLIST = os.path.join(os.path.dirname(__file__), os.pardir, 'data', 'species_20190902_14375.csv')
 JSON_OUT = os.path.join(os.path.dirname(__file__), os.pardir, 'site', 'redlist.json')
 
 iterable = []

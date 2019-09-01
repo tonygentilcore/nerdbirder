@@ -31,7 +31,7 @@ if len(sys.argv) == 2:
     englishlanguagename = language_to_englishname[language]
     outfile = 'families-' + language + '.json'
 
-TAXONOMY = os.path.join(os.path.dirname(__file__), os.pardir, 'data', 'eBird_Taxonomy_v2018_14Aug2018.csv')
+TAXONOMY = os.path.join(os.path.dirname(__file__), os.pardir, 'data', 'eBird_Taxonomy_v2019.csv')
 JSON_OUT = os.path.join(os.path.dirname(__file__), os.pardir, 'site', outfile)
 
 def requestWikicommonsVernacular(sci_name):
