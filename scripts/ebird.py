@@ -11,14 +11,17 @@ import json
 import os
 import re
 import sys
+import time
 import urllib2
 
 language_to_languagename = {
-  'es': 'español'
+  'es': 'español',
+  'fr': 'français'
 }
 
 language_to_englishname = {
-  'es': 'Spanish'
+  'es': 'Spanish',
+  'fr': 'French'
 }
 
 language = None
@@ -38,12 +41,12 @@ def requestWikicommonsVernacular(sci_name):
     try:
         response = urllib2.urlopen('https://commons.wikimedia.org/wiki/Category:' + sci_name)
         html = response.read()
-    except urllib2.HTTPError:
-        print 'HTTP Error for ' + sci_name
+    except urllib2.HTTPError as e:
+        print 'Wiki Commons HTTP Error for ' + sci_name, e
         return None
     m = re.search('<bdi class="vernacular" lang="' + language + '"><a href="[^"]+" class="extiw" title="[^"]+">([^<]+)</a></bdi>', html)
     if m:
-        print 'commons', m.group(1)
+        print 'Wiki Commons:', m.group(1)
         return m.group(1)
     return None
 
@@ -51,34 +54,36 @@ def requestWikispeciesVernacular(sci_name):
     try:
         response = urllib2.urlopen('https://species.wikimedia.org/wiki/' + sci_name)
         html = response.read()
-    except urllib2.HTTPError:
-        print 'HTTP Error for ' + sci_name
+    except urllib2.HTTPError as e:
+        print 'Wiki Species HTTP Error for ' + sci_name, e
         return None
     m = re.search('<b>' + languagename + ':</b>&#160;([^<]+)<br />', html)
     if m:
-        print 'species', m.group(1)
+        print 'Wiki Species:', m.group(1)
         return m.group(1)
     return None
 
 def requestInaturalistVernacular(sci_name):
+    time.sleep(2)
     try:
         response = urllib2.urlopen('https://www.inaturalist.org/taxon_names.json?q=' + sci_name)
         response_json = json.loads(response.read())
-    except urllib2.HTTPError:
-        print 'iNaturalist HTTP Error for ' + sci_name
+    except urllib2.HTTPError as e:
+        print 'iNaturalist HTTP Error for ' + sci_name, e
         return None
-    if len(response_json) != 1:
+    if len(response_json) < 1:
         return None
     taxon_id = response_json[0]['taxon_id']
+    time.sleep(2)
     try:
         response = urllib2.urlopen('https://www.inaturalist.org/taxon_names.json?taxon_id=' + str(taxon_id))
         response_json = json.loads(response.read())
-    except urllib2.HTTPError:
-        print 'iNaturalist HTTP Error for ' + sci_name
+    except urllib2.HTTPError as e:
+        print 'iNaturalist HTTP Error for ' + sci_name, e
         return None
     for record in response_json:
         if record['lexicon'] == englishlanguagename:
-            print 'iNaturalist', record['name']
+            print 'iNaturalist:', record['name']
             return record['name']
     return None
 
