@@ -8,7 +8,7 @@ If there's any interest in using this project, please let me know and I'd be hap
 
 ### First run setup
 ```sh
-pip install -t lib -r requirements.txt
+pip3 install -t lib -r requirements.txt
 ```
 
 ### Update graph json

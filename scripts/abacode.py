@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/local/bin/python3
 
 '''Generates json species -> ABA Code.
 
@@ -9,12 +9,12 @@ import csv
 import json
 import os
 
-CHECKLIST = os.path.join(os.path.dirname(__file__), os.pardir, 'data', 'ABA_Checklist-8.0.5.csv')
+CHECKLIST = os.path.join(os.path.dirname(__file__), os.pardir, 'data', 'ABA_Checklist-8.11a.csv')
 JSON_OUT = os.path.join(os.path.dirname(__file__), os.pardir, 'site', 'abacodes.json')
 
-FIELDNAMES = ['family', 'common name', 'scientific name', 'abbr', 'code']
+FIELDNAMES = ['family', 'common name', 'french name', 'scientific name', 'abbr', 'code']
 iterable = []
-with open(CHECKLIST, 'rU') as csvfile:
+with open(CHECKLIST, 'r') as csvfile:
     rows = csv.DictReader(csvfile, fieldnames=FIELDNAMES)
     for row in rows:
         scientific_name = row['scientific name']
