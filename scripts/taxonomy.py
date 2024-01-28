@@ -1,7 +1,7 @@
 import os
 from xml.etree.cElementTree import iterparse
 
-IOC_NAMES = os.path.join(os.path.dirname(__file__), os.pardir, 'data', 'master_ioc-names_xml.xml')
+IOC_NAMES = os.path.join(os.path.dirname(__file__), os.pardir, 'data', 'master_ioc-names_xml.14.1.xml')
 
 def getName(node):
     latin_name = node.findtext('latin_name')

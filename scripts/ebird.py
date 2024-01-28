@@ -23,12 +23,14 @@ requests_cache.install_cache(
 
 language_to_languagename = {
   'es': 'español',
-  'fr': 'français'
+  'fr': 'français',
+  'it': 'italiano'
 }
 
 language_to_englishname = {
   'es': 'Spanish',
-  'fr': 'French'
+  'fr': 'French',
+  'it': 'Italian'
 }
 
 language = None
@@ -41,7 +43,7 @@ if len(sys.argv) == 2:
     englishlanguagename = language_to_englishname[language]
     outfile = 'families-' + language + '.json'
 
-TAXONOMY = os.path.join(os.path.dirname(__file__), os.pardir, 'data', 'ebird_taxonomy_v2022.csv')
+TAXONOMY = os.path.join(os.path.dirname(__file__), os.pardir, 'data', 'ebird_taxonomy_v2023.csv')
 JSON_OUT = os.path.join(os.path.dirname(__file__), os.pardir, 'site', outfile)
 
 def requestWikicommonsVernacular(sci_name):

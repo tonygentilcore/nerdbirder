@@ -9,7 +9,7 @@ import csv
 import json
 import os
 
-CHECKLIST = os.path.join(os.path.dirname(__file__), os.pardir, 'data', 'ABA_Checklist-8.11a.csv')
+CHECKLIST = os.path.join(os.path.dirname(__file__), os.pardir, 'data', 'ABA_Checklist-8.13a.csv')
 JSON_OUT = os.path.join(os.path.dirname(__file__), os.pardir, 'site', 'abacodes.json')
 
 FIELDNAMES = ['family', 'common name', 'french name', 'scientific name', 'abbr', 'code']
